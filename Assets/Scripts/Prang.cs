@@ -10,7 +10,16 @@ public class Prang : MonoBehaviour
     public SpriteRenderer sprite;
 
     public float speed = 6f;
-    public float speedMod = 1f;
+    public float speedMod = 2f;
+
+    public Transform powerupObj;
+    public SpriteRenderer powerupSprite;
+    private float powerupPosTimer = 0;
+    private float powerupFlashTimer = 0;
+
+    private float powerupTimer = 0;
+    private readonly float powerupTimerMax = 15f;
+    private bool powerupFlashState = false;
 
     void Start()
     {
@@ -20,6 +29,10 @@ public class Prang : MonoBehaviour
         sprite = GetComponent<SpriteRenderer>();
 
         sprite.color = core.palette[3];
+
+        powerupObj = transform.GetChild(0);
+        powerupSprite = powerupObj.GetComponent<SpriteRenderer>();
+        powerupSprite.color = core.palette[7];
     }
 
     void Update()
@@ -27,19 +40,57 @@ public class Prang : MonoBehaviour
         if (Input.GetKey(KeyCode.Mouse0))
             core.lastMousePoint = core.cam.ScreenToWorldPoint(Input.mousePosition);
         if (core.lastMousePoint != new Vector2(99, 99))
-            rb.position += speed * speedMod * Time.deltaTime * (core.lastMousePoint - rb.position).normalized;
+            rb.position += speed * (core.powerupState == 2 ? speedMod : 1) * Time.deltaTime * (core.lastMousePoint - rb.position).normalized;
         if (Vector2.Distance(rb.position, core.lastMousePoint) < 0.125f)
             core.lastMousePoint = new Vector2(99, 99);
 
         if (!Input.GetKey(KeyCode.Mouse0) && !(Input.GetAxisRaw("Horizontal") == 0 && Input.GetAxisRaw("Vertical") == 0))
         {
             core.lastMousePoint = new Vector2(99, 99);
-            rb.position += speed * speedMod * Time.deltaTime * new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
+            rb.position += speed * (core.powerupState == 2 ? speedMod : 1) * Time.deltaTime *
+                new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
         }
 
         if (rb.position.x > core.bounds.x || rb.position.x < -core.bounds.x)
             rb.position = new Vector2(core.bounds.x * Mathf.Sign(rb.position.x), rb.position.y);
         if (rb.position.y > core.bounds.y || rb.position.y < -core.bounds.y)
             rb.position = new Vector2(rb.position.x, core.bounds.y * Mathf.Sign(rb.position.y));
+
+        if (core.powerupState == 1)
+        {
+            core.powerupState = 2;
+            powerupTimer = powerupTimerMax;
+            powerupSprite.enabled = true;
+        }
+        powerupTimer = Mathf.Clamp(powerupTimer - Time.deltaTime, 0, Mathf.Infinity);
+        if (core.powerupState == 2)
+        {
+            if (powerupTimer <= 4)
+            {
+                powerupFlashState = !powerupFlashState;
+                if (powerupFlashState)
+                    powerupSprite.enabled = !powerupSprite.enabled;
+            }
+            if (powerupTimer <= 0)
+            {
+                core.powerupState = 0;
+                sprite.color = core.palette[3];
+            }
+        }
+
+        powerupPosTimer += Time.deltaTime * 4;
+        if (powerupPosTimer >= Core.TAU)
+            powerupPosTimer -= Core.TAU;
+        powerupObj.transform.localPosition = new Vector2(0.667f, 0.667f + Mathf.Sin(powerupPosTimer) * 0.125f);
+        if (core.powerupState != 0)
+        {
+            powerupFlashTimer += Time.deltaTime;
+            if (powerupFlashTimer > 0.5f)
+                powerupFlashTimer -= 0.5f;
+            powerupSprite.color = core.palette[powerupFlashTimer >= 0.25f ? 0 : 6];
+            sprite.color = core.palette[powerupFlashTimer >= 0.25f ? 0 : 3];
+        }
+        else
+            powerupSprite.color = core.palette[7];
     }
 }

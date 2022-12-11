@@ -13,7 +13,7 @@ public class TextAlign : MonoBehaviour
     public Vector2 displayPos;
     public Vector2 posOffset;
 
-    void Start()
+    void Awake()
     {
         core = GameObject.FindWithTag("Core").GetComponent<Core>();
         rect = GetComponent<RectTransform>();
@@ -41,11 +41,15 @@ public class TextAlign : MonoBehaviour
 
     public void SetColor(int color)
     {
+        if (text == null)
+            text = GetComponent<Text>();
         text.color = core.palette[color];
     }
 
     public void SetText(string newText)
     {
+        if (text == null)
+            text = GetComponent<Text>();
         text.text = newText;
     }
 }
