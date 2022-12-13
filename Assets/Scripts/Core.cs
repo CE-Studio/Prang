@@ -26,8 +26,12 @@ public class Core : MonoBehaviour
     public Camera cam;
     public SpawnManager spawn;
     public AudioSource sfx;
+    public Transform canvas;
+    public RectTransform canvasRect;
 
     public AudioClip extraLife;
+
+    public GameObject pointPopup;
 
     public int lives = 2;
     public const int MAX_LIVES = 5;
@@ -37,12 +41,18 @@ public class Core : MonoBehaviour
     private int scoreTo1up = 50000;
     private readonly int score1upInc = 50000;
     public int powerupState = 0;
+    public int powerupCombo = 0;
+
+    public bool deathState = false;
+    public float deathTimer = 0;
 
     void Start()
     {
         Application.targetFrameRate = 60;
         spawn = GetComponent<SpawnManager>();
         sfx = GetComponent<AudioSource>();
+        canvas = GameObject.Find("Canvas").transform;
+        canvasRect = canvas.GetComponent<RectTransform>();
 
         for (int i = 0; i < livesImages.Count; i++)
             livesImages[i].color = palette[i < lives ? 3 : 7];
@@ -93,5 +103,16 @@ public class Core : MonoBehaviour
     public void PlaySound(AudioClip clip, float volume = 1)
     {
         sfx.PlayOneShot(clip, volume);
+    }
+
+    public void CreatePointPopup(Vector2 pos, int value)
+    {
+        GameObject newPopup = Instantiate(pointPopup, canvas);
+        PointPopup popupScript = newPopup.GetComponent<PointPopup>();
+
+        pos = RectTransformUtility.WorldToScreenPoint(cam, pos);
+        popupScript.rect.anchoredPosition = pos - canvasRect.sizeDelta / 2f;
+
+        popupScript.Instance(pos, value);
     }
 }

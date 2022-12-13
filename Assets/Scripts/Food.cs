@@ -105,6 +105,12 @@ public class Food : MonoBehaviour
             Destroy(gameObject);
         }
         lifeTime += Time.deltaTime;
+
+        if (core.deathState)
+        {
+            core.spawn.activePickups--;
+            Destroy(gameObject);
+        }
     }
 
     public virtual void OnTriggerEnter2D(Collider2D collision)
@@ -114,6 +120,7 @@ public class Food : MonoBehaviour
             core.IncrementScore(pointValues[type]);
             core.spawn.activePickups--;
             core.PlaySound(sfxPickup);
+            core.CreatePointPopup(transform.position, pointValues[type]);
             Destroy(gameObject);
         }
     }

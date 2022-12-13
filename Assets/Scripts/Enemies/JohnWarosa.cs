@@ -2,18 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class JohnBarosa : Enemy
+public class JohnWarosa : Enemy
 {
     private string direction = "right";
     private float timer = 0;
-    private readonly float jumpTimerMax = 0.45f;
-    private readonly float jumpDuration = 1f;
+    private readonly float jumpTimerMax = 0.75f;
+    private readonly float jumpDuration = 0.85f;
     private readonly float jumpCharge = 0.65f;
     private Vector2 jumpOrigin = Vector2.zero;
     private Vector2 jumpTarget = Vector2.zero;
-    private readonly float jumpDistance = 3.5f;
-    private readonly float jumpHeight = 1.25f;
-    private readonly float detectDistance = 4f;
+    private readonly float jumpDistance = 2.5f;
+    private readonly float jumpHeight = 1.05f;
+    private readonly float detectDistance = 5f;
     private string state = "idle";
 
     public AudioClip lunge;
@@ -21,7 +21,7 @@ public class JohnBarosa : Enemy
     public override void Awake()
     {
         base.Awake();
-        sprite.color = core.palette[5];
+        sprite.color = core.palette[4];
     }
 
     public override void Instance(Vector2 pos, string data)
@@ -56,6 +56,7 @@ public class JohnBarosa : Enemy
                     {
                         state = "jump";
                         timer = jumpDuration;
+                        RollForTurn();
                         jumpOrigin = transform.position;
                         jumpTarget = jumpOrigin + direction switch { "left" => Vector2.left, "down" => Vector2.down, "up" => Vector2.up, _ => Vector2.right } * jumpDistance;
                         if (jumpOrigin.x - jumpTarget.x != 0)
@@ -84,6 +85,22 @@ public class JohnBarosa : Enemy
                     }
                     break;
             }
+        }
+    }
+
+    private void RollForTurn()
+    {
+        float turnChance = Random.Range(0f, 1f);
+        float turnDir = Random.Range(0f, 1f);
+        if (turnChance < 0.5f)
+        {
+            direction = direction switch
+            {
+                "up" => turnDir < 0.5f ? "left" : "right",
+                "down" => turnDir < 0.5f ? "right" : "left",
+                "left" => turnDir < 0.5f ? "down" : "up",
+                _ => turnDir < 0.5f ? "up" : "down"
+            };
         }
     }
 }

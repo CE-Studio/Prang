@@ -20,17 +20,14 @@ public class TextAlign : MonoBehaviour
         text = GetComponent<Text>();
 
         truePos = rect.position;
-        if (rect.anchorMin.x == 0)
-            posOffset.x -= 2;
-        else if (rect.anchorMin.x == 1)
-            posOffset.x += 2;
+        posOffset.x += 2;
         if (rect.anchorMin.y == 0)
             posOffset.y -= 2;
         else if (rect.anchorMin.y == 1)
             posOffset.y += 2;
     }
 
-    void Update()
+    public virtual void Update()
     {
         displayPos = new Vector2(
             Mathf.RoundToInt(truePos.x * 0.25f) * 4f + posOffset.x,

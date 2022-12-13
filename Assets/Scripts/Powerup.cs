@@ -25,6 +25,8 @@ public class Powerup : Food
             core.spawn.activePickups--;
             core.PlaySound(powerupPickup);
             core.powerupState = 1;
+            core.powerupCombo = 0;
+            core.CreatePointPopup(transform.position, pointValues[type]);
             Destroy(gameObject);
         }
     }

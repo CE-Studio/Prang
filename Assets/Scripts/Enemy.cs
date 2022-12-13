@@ -6,26 +6,29 @@ public class Enemy : MonoBehaviour
 {
     public Core core;
     public Prang prang;
-    public SpawnManager spawn;
     public BoxCollider2D box;
     public SpriteRenderer sprite;
 
     public Sprite[] enemySprites;
     public Sprite[] explosionSprites;
 
-    public int pointValue = 0;
+    private int[] pointValues = new int[] { 100, 200, 500, 1000, 2000, 3000, 5000, 8000 };
 
     public AudioClip defeat;
 
     public bool active = true;
+    private float resetTimer;
+    private Vector2 resetDir;
+    private float resetSpeed = 30f;
     
-    public virtual void Start()
+    public virtual void Awake()
     {
         core = GameObject.FindWithTag("Core").GetComponent<Core>();
         prang = GameObject.FindWithTag("Prang").GetComponent<Prang>();
-        spawn = GameObject.FindWithTag("Core").GetComponent<SpawnManager>();
         box = GetComponent<BoxCollider2D>();
         sprite = GetComponent<SpriteRenderer>();
+        resetTimer = Random.Range(-1.5f, -1f);
+        resetDir = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)).normalized;
     }
 
     public virtual void Instance(Vector2 pos, string data)
@@ -37,8 +40,16 @@ public class Enemy : MonoBehaviour
     {
         if (Mathf.Abs(transform.position.x) > core.bounds.x + 5 || Mathf.Abs(transform.position.y) > core.bounds.y + 5)
         {
-            spawn.activeEnemies--;
+            core.spawn.activeEnemies--;
             Destroy(gameObject);
+        }
+        if (core.deathState)
+            active = false;
+        if (!active)
+        {
+            resetTimer += Time.deltaTime;
+            if (resetTimer >= 0)
+                transform.position += Time.deltaTime * resetSpeed * (Vector3)resetDir;
         }
     }
 
@@ -47,9 +58,12 @@ public class Enemy : MonoBehaviour
         if (collision.CompareTag("Prang") && core.powerupState == 2)
         {
             active = false;
+            int pointValue = pointValues[core.powerupCombo >= pointValues.Length ? pointValues.Length - 1 : core.powerupCombo];
+            core.powerupCombo++;
             core.IncrementScore(pointValue);
+            core.CreatePointPopup(transform.position, pointValue);
             box.enabled = false;
-            spawn.activeEnemies--;
+            core.spawn.activeEnemies--;
             core.PlaySound(defeat);
             StartCoroutine(DefeatAnim());
         }

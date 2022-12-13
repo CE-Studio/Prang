@@ -491,7 +491,10 @@ MonoBehaviour:
   cam: {fileID: 519420031}
   spawn: {fileID: 0}
   sfx: {fileID: 0}
+  canvas: {fileID: 0}
+  canvasRect: {fileID: 0}
   extraLife: {fileID: 8300000, guid: 4ce9e1cd083f44242b6557672a18422d, type: 3}
+  pointPopup: {fileID: 9190507149061925601, guid: ae40771ffdb8a0d4bb174ac6c4e5142c, type: 3}
   lives: 2
   livesImages:
   - {fileID: 1712651983}
@@ -501,6 +504,9 @@ MonoBehaviour:
   - {fileID: 9151026}
   score: 0
   powerupState: 0
+  powerupCombo: 0
+  deathState: 0
+  deathTimer: 0
 --- !u!114 &446050301
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -518,6 +524,13 @@ MonoBehaviour:
   activeEnemies: 0
   foodObj: {fileID: 3351689515023755882, guid: 8095f73c71c61ff449f3f63721202b79, type: 3}
   powerupObj: {fileID: 7234945092533948108, guid: 549471b56334e204398c89277319366d, type: 3}
+  johnBObj: {fileID: 4421478885937596212, guid: aa114cc5ee041a24e922387f066a1708, type: 3}
+  johnWObj: {fileID: 3259381205709117222, guid: a4265c078edc8cb448db9b15d8e7eefd, type: 3}
+  daveObj: {fileID: 4421478885937596212, guid: aa114cc5ee041a24e922387f066a1708, type: 3}
+  loanObj: {fileID: 4421478885937596212, guid: aa114cc5ee041a24e922387f066a1708, type: 3}
+  danielObj: {fileID: 3259381205709117222, guid: a4265c078edc8cb448db9b15d8e7eefd, type: 3}
+  susanObj: {fileID: 4421478885937596212, guid: aa114cc5ee041a24e922387f066a1708, type: 3}
+  courierObj: {fileID: 3259381205709117222, guid: a4265c078edc8cb448db9b15d8e7eefd, type: 3}
 --- !u!82 &446050302
 AudioSource:
   m_ObjectHideFlags: 0
@@ -824,6 +837,14 @@ MonoBehaviour:
   speedMod: 2
   powerupObj: {fileID: 0}
   powerupSprite: {fileID: 0}
+  sprites:
+  - {fileID: 4773600122041589604, guid: e227029c74c43e54588fdf5913277c1e, type: 3}
+  - {fileID: -4789670105439411607, guid: e227029c74c43e54588fdf5913277c1e, type: 3}
+  - {fileID: 7061801754131594114, guid: e227029c74c43e54588fdf5913277c1e, type: 3}
+  - {fileID: -638443171332479689, guid: e227029c74c43e54588fdf5913277c1e, type: 3}
+  - {fileID: -7377819553374844296, guid: e227029c74c43e54588fdf5913277c1e, type: 3}
+  death: {fileID: 8300000, guid: c1579bd6708d3aa478bf42757317b32f, type: 3}
+  respawn: {fileID: 8300000, guid: 9cc7c500b10ebe246a3c9d0720207133, type: 3}
 --- !u!61 &628762460
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -10,13 +10,13 @@ TextureImporter:
     second: Prang1
   - first:
       213: 7061801754131594114
-    second: Prang3
+    second: Prang2
   - first:
       213: -7377819553374844296
     second: Dead
   - first:
       213: -638443171332479689
-    second: Prang4
+    second: Prang3
   - first:
       213: -1428572451713796752
     second: Powerup
@@ -310,7 +310,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Prang3
+      name: Prang2
       rect:
         serializedVersion: 2
         x: 36
@@ -352,7 +352,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Prang4
+      name: Prang3
       rect:
         serializedVersion: 2
         x: 72

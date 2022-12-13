@@ -16,6 +16,8 @@ public class SpawnManager : MonoBehaviour
     private readonly float pickupTimerMax = 1.25f;
     private float enemyTimer = 0;
     private float enemyTimerMax = 4f;
+    private readonly float enemyTimerHardMax = 4f;
+    private readonly float enemyTimerRetractRate = 1.5f;
     private readonly float enemyTimerDecRate = 0.00625f;
     private float timeUntilPowerup = 15;
     private float powerupTimeMax = 15;
@@ -24,8 +26,18 @@ public class SpawnManager : MonoBehaviour
 
     public GameObject foodObj;
     public GameObject powerupObj;
+    public GameObject johnBObj;
+    public GameObject johnWObj;
+    public GameObject daveObj;
+    public GameObject loanObj;
+    public GameObject danielObj;
+    public GameObject susanObj;
+    public GameObject courierObj;
 
     private float[] foodWeights = new float[] { 1f, 0.5f, 0.35f, 0.125f, 0.05f };
+    // Apple, cherry, fish, purple drink, blue drink
+    private float[] enemyWeights = new float[] { 1f, 0.8f, 0.75f, 0.5f, 0.35f, 0.2f, 0.1f};
+    // John B, John W, Courier, Loan, Daniel, Dave, Susan
     
     void Start()
     {
@@ -42,7 +54,8 @@ public class SpawnManager : MonoBehaviour
             if (pickupTimer < 0)
             {
                 pickupTimer = Random.Range(pickupTimerMin, pickupTimerMax);
-                SpawnFood();
+                if (!core.deathState)
+                    SpawnFood();
             }
         }
         if (activeEnemies < MAX_ENEMIES)
@@ -51,6 +64,8 @@ public class SpawnManager : MonoBehaviour
             if (enemyTimer < 0)
             {
                 enemyTimer = enemyTimerMax;
+                if (!core.deathState)
+                    SpawnEnemy();
             }
         }
         enemyTimerMax -= enemyTimerDecRate * Time.deltaTime;
@@ -92,5 +107,74 @@ public class SpawnManager : MonoBehaviour
 
         GameObject newFood = Instantiate(foodObj);
         newFood.GetComponent<Food>().Instance(newType, spawnPos);
+    }
+
+    public void SpawnEnemy()
+    {
+        activeEnemies++;
+        Vector2 spawnPos;
+        string originDir;
+        if (Random.Range(0, 2) == 1)
+        {
+            if (Random.Range(0, 2) == 1)
+            {
+                spawnPos.y = core.bounds.y + 1.5f;
+                originDir = "down";
+            }
+            else
+            {
+                spawnPos.y = -core.bounds.y - 1.5f;
+                originDir = "up";
+            }
+            spawnPos.x = Random.Range(-core.bounds.x + 1f, core.bounds.x - 1f);
+        }
+        else
+        {
+            if (Random.Range(0, 2) == 1)
+            {
+                spawnPos.x = core.bounds.x + 1.5f;
+                originDir = "left";
+            }
+            else
+            {
+                spawnPos.x = -core.bounds.x - 1.5f;
+                originDir = "right";
+            }
+            spawnPos.y = Random.Range(-core.bounds.y + 1f, core.bounds.y - 1f);
+        }
+
+        int newType;
+        float spawnValue = Random.Range(0f, 1f);
+        if (spawnValue <= enemyWeights[6])
+            newType = 6;
+        else if (spawnValue <= enemyWeights[5])
+            newType = 5;
+        else if (spawnValue <= enemyWeights[4])
+            newType = 4;
+        else if (spawnValue <= enemyWeights[3])
+            newType = 3;
+        else if (spawnValue <= enemyWeights[2])
+            newType = 2;
+        else if (spawnValue <= enemyWeights[1])
+            newType = 1;
+        else
+            newType = 0;
+
+        GameObject newEnemy = Instantiate(newType switch
+        {
+            1 => johnWObj,
+            2 => courierObj,
+            3 => loanObj,
+            4 => danielObj,
+            5 => daveObj,
+            6 => susanObj,
+            _ => johnBObj
+        });
+        newEnemy.GetComponent<Enemy>().Instance(spawnPos, originDir);
+    }
+
+    public void RetractEnemyRate()
+    {
+        enemyTimerMax = Mathf.Clamp(enemyTimerMax + enemyTimerRetractRate, 0, enemyTimerHardMax);
     }
 }
