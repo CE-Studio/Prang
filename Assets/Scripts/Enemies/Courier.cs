@@ -29,7 +29,7 @@ public class Courier : Enemy
         {
             GameObject newSegment = new GameObject();
             newSegment.transform.parent = transform;
-            newSegment.transform.localPosition = new Vector2(i - (length * 0.5f), 0);
+            newSegment.transform.localPosition = new Vector2(i - (length * 0.5f) + 0.5f, 0);
             SpriteRenderer segmentSprite = newSegment.AddComponent<SpriteRenderer>();
             segmentSprite.color = core.palette[4];
             if (length == 1)

@@ -139,6 +139,7 @@ public class Prang : MonoBehaviour
             {
                 if (core.lives > 0)
                 {
+                    box.enabled = true;
                     core.deathState = false;
                     transform.position = Vector2.zero;
                     core.PlaySound(respawn, 0.5f);
@@ -171,6 +172,7 @@ public class Prang : MonoBehaviour
     {
         if (collision.CompareTag("Hazard") && (core.powerupState == 0 || collision.name.Contains("Courier")))
         {
+            box.enabled = false;
             core.powerupState = 0;
             powerupTimer = 0;
             core.deathState = true;
