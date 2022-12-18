@@ -529,7 +529,7 @@ MonoBehaviour:
   daveObj: {fileID: 2475890223325047859, guid: cecc0c316f7485c4eafd50e2ffbc05e2, type: 3}
   loanObj: {fileID: 1472883954262109074, guid: dc466f1747c8b8940a2fca7789c94095, type: 3}
   danielObj: {fileID: 1052614889860479822, guid: 49052564d4d7a7747ac1cc8805febceb, type: 3}
-  susanObj: {fileID: 4421478885937596212, guid: aa114cc5ee041a24e922387f066a1708, type: 3}
+  susanObj: {fileID: 5774080657927713369, guid: 750154a68ab43c34699c074de68acc1f, type: 3}
   courierObj: {fileID: 2872638928656028470, guid: 8c0eedf865f5d724ab6ad67ae2248716, type: 3}
 --- !u!82 &446050302
 AudioSource:

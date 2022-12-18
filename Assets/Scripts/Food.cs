@@ -15,7 +15,7 @@ public class Food : MonoBehaviour
     public int[] pointValues = new int[] { 100, 200, 300, 500, 800, 1000 };
     public Sprite[] foodSprites = new Sprite[] { };
 
-    private float lifeTime = 0;
+    public float lifeTime = 0;
     private const float LIFETIME_MAX = 15f;
 
     public float originY = 0;
@@ -80,13 +80,14 @@ public class Food : MonoBehaviour
             if (shineSprite != null)
                 shineSprite.enabled = sprite.enabled;
             transform.position = new Vector2(transform.position.x, originY + Mathf.Cos((lifeTime - 0.4f) * 4));
+            if (lifeTime >= Mathf.PI * 0.25f)
+                transform.position = new Vector2(transform.position.x, originY);
         }
         else if (lifeTime > Mathf.PI * 0.25f && lifeTime < LIFETIME_MAX - 4)
         {
             sprite.enabled = true;
             if (shineSprite != null)
                 shineSprite.enabled = true;
-            transform.position = new Vector2(transform.position.x, originY);
             box.enabled = true;
         }
         else if (lifeTime > LIFETIME_MAX - 4 && lifeTime < LIFETIME_MAX)

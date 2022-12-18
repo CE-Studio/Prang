@@ -9,6 +9,7 @@ public class Courier : Enemy
     private float parkTime;
     private float speed;
     private float speedMax;
+    private readonly int maxLength = 5;
 
     public override void Awake()
     {
@@ -24,7 +25,7 @@ public class Courier : Enemy
     {
         base.Instance(pos, data);
         direction = data;
-        int length = Random.Range(1, 4);
+        int length = Random.Range(1, maxLength + 1);
         for (int i = 0; i < length; i++)
         {
             GameObject newSegment = new GameObject();
